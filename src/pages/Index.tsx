@@ -1,13 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { GameScreen } from '@/types/game';
+import MainMenu from '@/components/game/MainMenu';
+import CampaignScreen from '@/components/game/CampaignScreen';
+import GameScreenComponent from '@/components/game/GameScreen';
 
 const Index = () => {
+  const [screen, setScreen] = useState<GameScreen>('main-menu');
+  const [currentMission, setCurrentMission] = useState<number>(1);
+
+  function handleNavigate(s: GameScreen) {
+    setScreen(s);
+  }
+
+  function handleStartMission(id: number) {
+    setCurrentMission(id);
+    setScreen('game');
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
-    </div>
+    <>
+      {screen === 'main-menu' && (
+        <MainMenu onNavigate={handleNavigate} />
+      )}
+      {screen === 'campaign' && (
+        <CampaignScreen onNavigate={handleNavigate} onStartMission={handleStartMission} />
+      )}
+      {screen === 'game' && (
+        <GameScreenComponent onNavigate={handleNavigate} missionId={currentMission} />
+      )}
+    </>
   );
 };
 
